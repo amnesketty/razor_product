@@ -1,0 +1,45 @@
+﻿@inject Services.CartService CartService
+@inject Services.ProductProviderService ProductProviderService
+@inject NavigationManager UriHelper
+
+@foreach (var product in Products)
+{
+    <div class="card w-25">
+        <div class="card-body">
+            <h5 class="card-title">@product.Id</h5>
+            <p class="card-text">@product.Title</p>
+            <blockquote class="card-text">$@product.Body</blockquote>
+            @if (DisplayBuyButton)
+            {
+                <button class="btn btn-primary" type="button"
+                        @onclick="() => Navigate(product.Id)"
+                        >Detail</button>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public List<Models.Product> Products { get; set; } = new();
+    [Parameter]
+    public bool DisplayBuyButton { get; set; }
+
+    //add method to add a product to the cart
+    //this method will be invoked when the user pressed buy button
+    @*private void Buy(int productId)
+    {
+        CartService.AddProductToCart(productId);
+    }*@
+
+    void Navigate(int Id)
+{
+    UriHelper.NavigateTo("/ProductDetail/" + Id);
+}
+    
+    private void ProductDetail(int productId)
+    {
+        ProductProviderService.GetProductDetail(productId);
+    }
+}
